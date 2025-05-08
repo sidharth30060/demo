@@ -26,8 +26,8 @@ jobs:
 
       - name: Set Git identity
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "github-actions@github.com"
+          git config --global user.name "Sidharth Sharma"
+          git config --global user.email "sidharth.sharma1@dell.com"
 
       - name: Create or Modify file
         run: |
