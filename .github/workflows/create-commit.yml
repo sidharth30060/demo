@@ -19,6 +19,9 @@ jobs:
           git_commit_gpgsign: true
           git_tag_gpgsign: true
           git_config_global: true
+           # Add the following to prevent interactive prompts for the passphrase
+          gpg_config: |
+            gpg --batch --no-tty --pinentry-mode loopback
 
       - name: Set Git identity
         run: |
