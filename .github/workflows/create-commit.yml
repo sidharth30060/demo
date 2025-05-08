@@ -23,8 +23,8 @@ jobs:
 
       - name: Set Git identity
         run: |
-          git config --global user.name "Sidharth Sharma"
-          git config --global user.email "Sidharth.Sharma1@dell.com"
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
 
       - name: Create or Modify file
         run: |
@@ -39,4 +39,4 @@ jobs:
         run: |
           git push origin HEAD:main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
