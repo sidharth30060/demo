@@ -31,8 +31,8 @@ jobs:
 
       - name: Create or Modify file
         run: |
-          echo "This is a verified commit" > new_file.txt
-          git add new_file.txt
+          echo "This is a verified commit" > new_file1.txt
+          git add new_file1.txt
 
       - name: Commit changes with GPG signature
         run: |
