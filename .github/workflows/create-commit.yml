@@ -1,31 +1,25 @@
-# .github/workflows/sign-as-actor.yml
-name: Signed Commit as Triggering User
+name: App-signed commits
+on: push
 
-on:
-  workflow_dispatch:
+permissions:
+  contents: write
 
 jobs:
-  commit-as-actor:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set author as triggering user
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}  # Automatically provided
+        
+      - name: Configure Git
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-
-      - name: Make a change and commit
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Make commit
         run: |
-          echo "Timestamp: $(date)" >> changes.txt
-          git add changes.txt
-          git commit -m "Add timestamp as ${{ github.actor }}"
-
-      - name: Push commit using GitHub token
-        env:
-          TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
-          git push origin HEAD:${{ github.ref_name }}
+          echo "Test" > test.txt
+          git add test.txt
+          git commit -m "Commit signed by GitHub Actions"
+          git push
