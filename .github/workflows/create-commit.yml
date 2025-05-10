@@ -1,29 +1,32 @@
-name: Verified Commits
-on:
-  workflow_dispatch:
-    inputs:
-      commit_message:
-        description: 'Commit message'
-        required: true
-        default: 'Verified commit from GitHub Actions'
+name: Create Verified Commits with PAT
+on: workflow_dispatch
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
-  build:
+  create-commit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        
-      - name: Configure Git
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0  # Needed for branch operations
+
+      - name: Make changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-      - name: Make verified commit
-        run: |
-          echo "Test $(date +%s)" > test123.txt
-          git add test123.txt
-          git commit -m "${{ github.event.inputs.commit_message }}"
-          git push
+          # Example modifications
+          echo "Last updated: $(date)" > timestamp.txt
+          echo "v1.0.0" > version.txt
+          git add .
+
+      - name: Create Verified Commit & PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          commit-message: "chore: auto-updated configs"
+          title: "Automated configuration updates"
+          branch: "auto-updates-$(date +%s)"
+          sign-commits: true
+          delete-branch: true
