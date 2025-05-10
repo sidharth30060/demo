@@ -23,7 +23,7 @@ jobs:
           
       - name: Make verified commit
         run: |
-          echo "Test $(date +%s)" > test.txt
-          git add test.txt
+          echo "Test $(date +%s)" > test123.txt
+          git add test123.txt
           git commit -m "${{ github.event.inputs.commit_message }}"
           git push
