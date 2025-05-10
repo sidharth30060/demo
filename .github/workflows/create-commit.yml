@@ -1,6 +1,12 @@
 name: App-signed commits
-on: push
-
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: 'Commit message'
+        required: true
+        default: 'Commit signed by GitHub Actions'
+        
 permissions:
   contents: write
 
@@ -10,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT_TOKEN }}  # Automatically provided
+          token: ${{ secrets.PAT_TOKEN }}
         
       - name: Configure Git
         run: |
@@ -21,5 +27,5 @@ jobs:
         run: |
           echo "Test" > test.txt
           git add test.txt
-          git commit -m "Commit signed by GitHub Actions"
+          git commit -m "${{ github.event.inputs.commit_message }}"
           git push
