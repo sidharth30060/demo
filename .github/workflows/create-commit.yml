@@ -1,4 +1,4 @@
-name: Create Verified Commits with PAT
+name: Create Verified Commits
 on: workflow_dispatch
 
 permissions:
@@ -12,21 +12,21 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          fetch-depth: 0  # Needed for branch operations
+          fetch-depth: 0
 
       - name: Make changes
         run: |
-          # Example modifications
-          echo "Last updated: $(date)" > timestamp.txt
-          echo "v1.0.0" > version.txt
+          echo "Updated: $(date)" > timestamp.txt
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
+          git commit -m "Pre-commit" || echo "No changes to commit"
 
-      - name: Create Verified Commit & PR
+      - name: Create PR
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          commit-message: "chore: auto-updated configs"
-          title: "Automated configuration updates"
-          branch: "auto-updates-$(date +%s)"
+          branch: "changes-${{ github.run_id }}"
+          commit-message: "chore: automated updates"
+          title: "Auto-update files"
           sign-commits: true
-          delete-branch: true
