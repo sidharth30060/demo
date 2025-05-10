@@ -1,44 +1,29 @@
-name: Create Verified Commit
+# .github/workflows/sign-commit.yml
+name: Signed Commit via GitHub Actions Bot
 
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:
 
 jobs:
-  create-verified-commit:
+  signed-commit:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0        # Ensure we get full history and branches
-          token: ${{ secrets.PAT_TOKEN }}  # Use PAT for pushing and creating PRs
+        uses: actions/checkout@v3
 
-      - name: Set up GPG key for signing commits
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
-          git_tag_gpgsign: true
-          git_config_global: true
-
-      - name: Set Git identity
+      - name: Setup GitHub Actions bot identity
         run: |
-          git config --global user.name "Sidharth Sharma"
-          git config --global user.email "sidharth.sharma1@dell.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Create or Modify file
+      - name: Make a commit (dummy timestamp)
         run: |
-          echo "This is a verified commit" > new_file1.txt
-          git add new_file1.txt
+          echo "Timestamp: $(date)" >> changes.txt
+          git add changes.txt
+          git commit -m "Add timestamp"
 
-      - name: Commit changes with GPG signature
+      - name: Push commit (automatically signed by GitHub API)
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}  # Fine-grained PAT with 'repo' scope
         run: |
-          git commit -S -m "Create verified commit"
-        
-      - name: Push changes
-        run: |
-          git push origin HEAD:main
-
+          git push origin HEAD:${{ github.ref_name }}
