@@ -1,12 +1,12 @@
-name: App-signed commits
+name: Verified Commits
 on:
   workflow_dispatch:
     inputs:
       commit_message:
         description: 'Commit message'
         required: true
-        default: 'Commit signed by GitHub Actions'
-        
+        default: 'Verified commit from GitHub Actions'
+
 permissions:
   contents: write
 
@@ -15,17 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
         
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-      - name: Make commit
+      - name: Make verified commit
         run: |
-          echo "Test" > test.txt
+          echo "Test $(date +%s)" > test.txt
           git add test.txt
           git commit -m "${{ github.event.inputs.commit_message }}"
           git push
