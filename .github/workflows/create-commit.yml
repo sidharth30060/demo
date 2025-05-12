@@ -1,32 +1,27 @@
-name: Create Verified Commits
-on: workflow_dispatch
+name: Commit and Push Changes
 
-permissions:
-  contents: write
-  pull-requests: write
+on:
+  workflow_dispatch: # allows manual trigger
 
 jobs:
-  create-commit:
+  commit_changes:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
-          fetch-depth: 0
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Make changes
-        run: |
-          echo "Updated: $(date)" > timestamp.txt
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Pre-commit" || echo "No changes to commit"
+    - name: Make changes
+      run: |
+        echo "Some new content" >> newfile.txt
+        # You can run your own script here instead
 
-      - name: Create PR
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
-          branch: "changes-${{ github.run_id }}"
-          commit-message: "chore: automated updates"
-          title: "Auto-update files"
-          sign-commits: true
+    - name: Commit and push changes
+      run: |
+        git add .
+        git commit -m "chore: automated changes"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
