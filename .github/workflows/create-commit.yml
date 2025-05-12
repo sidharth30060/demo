@@ -22,7 +22,7 @@ jobs:
       uses: peter-evans/create-pull-request@v7
       with:
         commit-message: "chore: automated changes"
-        branch: automated/update-$(date +%s)
+        branch: my-update
         title: "chore: automated changes"
         body: |
           This PR was created automatically by a GitHub Action.
