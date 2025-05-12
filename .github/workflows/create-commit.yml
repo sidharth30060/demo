@@ -31,5 +31,5 @@ jobs:
     - name: Commit and push changes
       run: |
         git add .
-        git commit -m -S "chore: automated changes"
+        git commit -S -m  "chore: automated changes"
         git push
