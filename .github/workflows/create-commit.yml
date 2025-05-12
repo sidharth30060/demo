@@ -11,7 +11,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.PAT_TOKEN }}
+        token: ${{ secrets.PAT_TOKEN }} 
+    
+    - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+            gpg_private_key: ${{ secrets.CSM_GPG_PRIVATE_KEY }}
+            passphrase: ${{ secrets.CSM_GPG_PASSPHRASE }}
+            git_user_signingkey: true
+            git_commit_gpgsign: true
+            git_tag_gpgsign: true
+            git_config_global: true
 
     - name: Make changes
       run: |
@@ -21,7 +31,5 @@ jobs:
     - name: Commit and push changes
       run: |
         git add .
-        git commit -m "chore: automated changes"
+        git commit -m -S "chore: automated changes"
         git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
