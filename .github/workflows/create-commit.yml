@@ -14,14 +14,14 @@ jobs:
         token: ${{ secrets.PAT_TOKEN }} 
     
     - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-            gpg_private_key: ${{ secrets.CSM_GPG_PRIVATE_KEY }}
-            passphrase: ${{ secrets.CSM_GPG_PASSPHRASE }}
-            git_user_signingkey: true
-            git_commit_gpgsign: true
-            git_tag_gpgsign: true
-            git_config_global: true
+      uses: crazy-max/ghaction-import-gpg@v6
+      with:
+          gpg_private_key: ${{ secrets.CSM_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.CSM_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_tag_gpgsign: true
+          git_config_global: true
 
     - name: Make changes
       run: |
