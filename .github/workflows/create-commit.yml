@@ -20,7 +20,8 @@ jobs:
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
-      with:
+      with: 
+        token: ${{ secrets.PAT_TOKEN }}  # ✅ make sure it's here
         commit-message: "chore: automated changes"
         branch: my-update
         title: "chore: automated changes"
